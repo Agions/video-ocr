@@ -1,0 +1,136 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "visionsub"
+version = "2.0.0"
+description = "Professional Video OCR Subtitle Extraction Tool"
+authors = ["Agions"]
+readme = "README.md"
+packages = [{include = "visionsub", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyqt6 = "^6.6.1"
+opencv-python-headless = "^4.8.0"
+pydantic = "^2.5.3"
+pysrt = "^1.1.2"
+numpy = ">=1.26.2,<2.0.0"
+tqdm = "^4.66.1"
+paddlepaddle = "^2.6.1"
+paddleocr = "^2.7.3"
+pytesseract = "^0.3.10"
+easyocr = "^1.7.0"
+python-magic = "^0.4.27"
+psutil = "^5.9.6"
+pyyaml = "^6.0.1"
+pandas = "^2.1.4"
+aiofiles = "^23.2.1"
+asyncio-throttle = "^1.0.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+ruff = "^0.1.9"
+pytest-cov = "^4.1.0"
+pytest-qt = "^4.2.0"
+pytest-mock = "^3.12.0"
+pytest-asyncio = "^0.21.1"
+pytest-benchmark = "^4.0.0"
+pytest-xdist = "^3.5.0"
+pytest-randomly = "^3.15.0"
+pytest-html = "^4.1.1"
+pytest-selenium = "^4.1.0"
+locust = "^2.17.0"
+bandit = "^1.7.5"
+safety = "^2.3.5"
+schemathesis = "^3.23.0"
+factory-boy = "^3.3.0"
+faker = "^19.12.0"
+responses = "^0.24.1"
+freezegun = "^1.2.2"
+vcrpy = "^5.1.0"
+allure-pytest = "^2.13.2"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "N", "C4", "B"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.poetry.scripts]
+visionsub-cli = "visionsub.cli.main:main"
+visionsub-gui = "visionsub.ui.main:main"
+
+[tool.pytest.ini_options]
+# Test configuration
+minversion = "7.0"
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=visionsub",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=80"
+]
+
+# Test discovery
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Markers
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "performance: marks tests as performance tests",
+    "gui: marks tests as GUI tests",
+    "security: marks tests as security tests",
+    "e2e: marks tests as end-to-end tests",
+    "load: marks tests as load tests",
+    "accessibility: marks tests as accessibility tests",
+    "regression: marks tests as regression tests",
+    "smoke: marks tests as smoke tests"
+]
+
+# Filter warnings
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::UserWarning"
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src/visionsub"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]
+
+[tool.coverage.html]
+directory = "htmlcov"

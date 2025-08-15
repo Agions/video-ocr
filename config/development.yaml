@@ -1,0 +1,285 @@
+# Development configuration for VisionSub
+app:
+  name: "VisionSub"
+  version: "1.0.0"
+  environment: "development"
+  debug: true
+  secret_key: "dev-secret-key-not-for-production"
+
+# OCR Configuration
+ocr:
+  default_engine: "paddle"
+  engines:
+    paddle:
+      enabled: true
+      lang: "ch"
+      use_angle_cls: true
+      det_model_dir: "/app/models/paddle/det"
+      rec_model_dir: "/app/models/paddle/rec"
+      cls_model_dir: "/app/models/paddle/cls"
+    
+    tesseract:
+      enabled: true
+      lang: "chi_sim+eng"
+      data_path: "/usr/share/tesseract-ocr/4.00/tessdata"
+      config: ""
+  
+  preprocessing:
+    enabled: true
+    resize:
+      max_width: 1920
+      max_height: 1080
+      maintain_aspect_ratio: true
+    denoise:
+      enabled: true
+      method: "bilateral"
+    enhance:
+      enabled: true
+      contrast: 1.2
+      brightness: 1.1
+  
+  postprocessing:
+    confidence_threshold: 0.5  # Lower threshold for development
+    text_merge:
+      enabled: true
+      max_distance: 50
+      max_angle_diff: 15
+    spell_check:
+      enabled: false
+      lang: "zh"
+
+# Processing Configuration
+processing:
+  video:
+    supported_formats: ["mp4", "avi", "mkv", "mov", "wmv", "flv", "webm"]
+    max_duration: 600  # 10 minutes for development
+    max_file_size: "100MB"
+  
+  frame_extraction:
+    method: "uniform"
+    interval: 2.0  # Slower for development
+    max_frames: 100
+  
+  batch:
+    enabled: true
+    queue_size: 20
+    max_concurrent: 2
+    timeout: 120  # seconds
+  
+  roi:
+    enabled: true
+    default_regions:
+      - name: "subtitle_area"
+        x: 0
+        y: 0.8
+        width: 1.0
+        height: 0.2
+
+# Cache Configuration
+cache:
+  enabled: true
+  type: "memory"  # Use memory cache for development
+  memory:
+    max_size: "128MB"
+    eviction_policy: "lru"
+  ttl:
+    frames: 1800
+    ocr_results: 3600
+    processed_videos: 7200
+
+# Database Configuration
+database:
+  url: "sqlite:////app/data/visionsub_dev.db"
+  sqlite:
+    path: "/app/data/visionsub_dev.db"
+    pragmas:
+      journal_mode: "WAL"
+      synchronous: "NORMAL"
+      cache_size: "-64000"
+      temp_store: "MEMORY"
+
+# Logging Configuration
+logging:
+  level: "DEBUG"
+  format: "detailed"
+  handlers:
+    console:
+      enabled: true
+      level: "DEBUG"
+      format: "colored"
+    
+    file:
+      enabled: true
+      level: "DEBUG"
+      path: "/app/logs/visionsub_dev.log"
+      max_size: "50MB"
+      backup_count: 3
+      encoding: "utf-8"
+  
+  loggers:
+    root:
+      level: "DEBUG"
+      handlers: ["console", "file"]
+    
+    visionsub:
+      level: "DEBUG"
+      handlers: ["console", "file"]
+    
+    uvicorn:
+      level: "DEBUG"
+      handlers: ["console", "file"]
+    
+    sqlalchemy:
+      level: "INFO"
+      handlers: ["console", "file"]
+
+# Security Configuration
+security:
+  api_key: "dev-api-key"
+  allowed_hosts: ["localhost", "127.0.0.1", "0.0.0.0"]
+  cors:
+    enabled: true
+    origins: ["*"]
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    headers: ["*"]
+    allow_credentials: true
+  
+  rate_limit:
+    enabled: false  # Disabled for development
+  
+  authentication:
+    enabled: false  # Disabled for development
+  
+  encryption:
+    enabled: false
+
+# UI Configuration
+ui:
+  theme: "light"
+  language: "zh_CN"
+  window:
+    default_width: 1200
+    default_height: 800
+    min_width: 800
+    min_height: 600
+  
+  responsive:
+    enabled: true
+    breakpoint_tablet: 768
+    breakpoint_mobile: 480
+  
+  accessibility:
+    enabled: true
+    high_contrast: false
+    font_size: "medium"
+  
+  features:
+    batch_processing: true
+    real_time_preview: true
+    progress_indicators: true
+    export_options: true
+    debug_tools: true
+
+# Performance Configuration
+performance:
+  optimization:
+    enabled: true
+    memory_management: true
+    cpu_optimization: true
+    gpu_acceleration: false
+  
+  threading:
+    max_workers: 2
+    thread_pool_size: 4
+    io_threads: 2
+  
+  memory:
+    max_usage: "1GB"
+    gc_threshold: 500
+    cache_limit: "128MB"
+  
+  monitoring:
+    enabled: true
+    metrics_port: 9091
+    health_check_interval: 10
+
+# Storage Configuration
+storage:
+  upload:
+    directory: "/app/uploads"
+    max_file_size: "100MB"
+    allowed_extensions: ["mp4", "avi", "mkv", "mov", "wmv", "flv", "webm"]
+  
+  output:
+    directory: "/app/processed"
+    formats: ["srt", "vtt", "txt", "ass"]
+    encoding: "utf-8"
+  
+  backup:
+    enabled: false
+
+# API Configuration
+api:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  reload: true
+  
+  endpoints:
+    health: "/health"
+    ocr: "/api/v1/ocr"
+    batch: "/api/v1/batch"
+    config: "/api/v1/config"
+    status: "/api/v1/status"
+  
+  documentation:
+    enabled: true
+    path: "/docs"
+    ui: "swagger"
+  
+  rate_limiting:
+    enabled: false
+
+# Web Interface Configuration
+web:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8000
+  reload: true
+  
+  features:
+    file_upload: true
+    real_time_processing: true
+    batch_management: true
+    user_management: false
+    analytics: false
+    debug_panel: true
+  
+  static_files:
+    directory: "/app/web/static"
+    cache_control: "no-cache"
+  
+  templates:
+    directory: "/app/web/templates"
+    auto_reload: true
+
+# Development Tools
+development:
+  debug_toolbar: true
+  profiling: true
+  test_mode: true
+  mock_data: true
+  
+  hot_reload:
+    enabled: true
+    watch_patterns: ["*.py", "*.yaml", "*.json"]
+  
+  testing:
+    enabled: true
+    coverage: true
+    integration_tests: true
+  
+  documentation:
+    auto_generate: true
+    include_examples: true

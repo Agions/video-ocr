@@ -1,0 +1,114 @@
+/*
+ * Professional Dark Theme for VisionSub
+ */
+
+QWidget {
+    background-color: #2B2B2B;
+    color: #F2F2F2;
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+}
+
+QMainWindow {
+    background-color: #2B2B2B;
+}
+
+/* Labels */
+QLabel {
+    color: #CCCCCC;
+    padding: 5px;
+}
+
+/* Buttons */
+QPushButton {
+    background-color: #007ACC;
+    color: #FFFFFF;
+    border: 1px solid #007ACC;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #005A9E;
+    border: 1px solid #005A9E;
+}
+
+QPushButton:pressed {
+    background-color: #004578;
+}
+
+QPushButton:disabled {
+    background-color: #555555;
+    color: #999999;
+    border: 1px solid #555555;
+}
+
+/* Progress Bar */
+QProgressBar {
+    border: 1px solid #444444;
+    border-radius: 4px;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #3A3A3A;
+}
+
+QProgressBar::chunk {
+    background-color: #007ACC;
+    border-radius: 3px;
+    margin: 1px;
+}
+
+/* Text Edit */
+QTextEdit {
+    background-color: #212121;
+    color: #E0E0E0;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    padding: 5px;
+    font-family: "Consolas", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+/* Scroll Bars */
+QScrollBar:vertical {
+    border: 1px solid #444444;
+    background: #3A3A3A;
+    width: 15px;
+    margin: 15px 0 15px 0;
+}
+
+QScrollBar::handle:vertical {
+    background: #555555;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    border: 1px solid #444444;
+    background: #3A3A3A;
+    height: 15px;
+    margin: 0 15px 0 15px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #555555;
+    min-width: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+/* Message Box */
+QMessageBox {
+    background-color: #2B2B2B;
+}
+
+QMessageBox QLabel {
+    color: #F2F2F2;
+}

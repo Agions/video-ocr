@@ -1,0 +1,340 @@
+# Production configuration for VisionSub Microservices
+# This configuration is optimized for production deployment
+
+# Environment settings
+environment: production
+debug: false
+log_level: INFO
+
+# Hot reload configuration (disabled in production)
+hot_reload:
+  enabled: false
+  watch_files: false
+  watch_environment: true
+  debounce_interval: 5.0
+  max_file_size: 10485760  # 10MB
+  allowed_extensions:
+    - .yaml
+    - .yml
+    - .json
+  ignored_paths:
+    - __pycache__
+    - .git
+    - node_modules
+    - .pytest_cache
+    - venv
+    - .venv
+    - logs
+    - temp
+
+# Database configuration (production PostgreSQL)
+database:
+  host: ${VISIONSUB_DB_HOST:-localhost}
+  port: ${VISIONSUB_DB_PORT:-5432}
+  database: ${VISIONSUB_DB_NAME:-visionsub}
+  username: ${VISIONSUB_DB_USER:-visionsub}
+  password: ${VISIONSUB_DB_PASSWORD}
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_recycle: 3600
+  ssl_mode: require
+
+# Redis configuration (production Redis)
+redis:
+  host: ${VISIONSUB_REDIS_HOST:-localhost}
+  port: ${VISIONSUB_REDIS_PORT:-6379}
+  db: ${VISIONSUB_REDIS_DB:-0}
+  password: ${VISIONSUB_REDIS_PASSWORD}
+  max_connections: 50
+  socket_timeout: 5.0
+  connection_pool_timeout: 10.0
+  ssl_enabled: true
+
+# OCR Service configuration (production)
+ocr_service:
+  host: ${VISIONSUB_OCR_HOST:-ocr-service}
+  port: ${VISIONSUB_OCR_PORT:-8081}
+  max_workers: 8
+  queue_size: 5000
+  timeout: 60.0
+  retry_attempts: 3
+  cache_ttl: 7200  # 2 hours
+  health_check_interval: 30
+
+# UI Service configuration (production)
+ui_service:
+  host: ${VISIONSUB_UI_HOST:-ui-service}
+  port: ${VISIONSUB_UI_PORT:-8080}
+  static_files_path: "/app/static"
+  template_path: "/app/templates"
+  session_timeout: 7200  # 2 hours
+  max_upload_size: 104857600  # 100MB
+  health_check_interval: 30
+
+# Gateway configuration (production)
+gateway:
+  host: ${VISIONSUB_GATEWAY_HOST:-0.0.0.0}
+  port: ${VISIONSUB_GATEWAY_PORT:-8000}
+  cors_origins:
+    - "https://yourdomain.com"
+    - "https://www.yourdomain.com"
+  rate_limit_requests: 1000
+  rate_limit_window: 60
+  jwt_secret: ${VISIONSUB_GATEWAY_JWT_SECRET}
+  jwt_expiration: 7200  # 2 hours
+  enable_https: true
+  ssl_cert_path: "/etc/ssl/certs/visionsub.crt"
+  ssl_key_path: "/etc/ssl/private/visionsub.key"
+
+# Monitoring configuration (production)
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  health_check_interval: 30
+  log_level: INFO
+  tracing_enabled: true
+  profiling_enabled: false
+  metrics_retention_days: 30
+  enable_alerts: true
+  alert_webhook_url: ${VISIONSUB_ALERT_WEBHOOK_URL}
+
+# Service mesh configuration (production)
+service_mesh:
+  enabled: true
+  health_check_interval: 30
+  circuit_breaker_failure_threshold: 5
+  circuit_breaker_recovery_timeout: 120
+  load_balancer_strategy: "weighted_round_robin"
+  retry_max_attempts: 3
+  retry_base_delay: 1.0
+  retry_max_delay: 10.0
+  enable_service_discovery: true
+  enable_distributed_tracing: true
+
+# Performance configuration (production)
+performance:
+  async_processing: true
+  max_concurrent_requests: 500
+  request_timeout: 60.0
+  worker_threads: 8
+  memory_limit_mb: 4096  # 4GB per service
+  cache_size_mb: 2048
+  enable_compression: true
+  enable_gzip: true
+  enable_brotli: true
+  connection_pool_size: 100
+  keepalive_timeout: 30
+
+# Security configuration (production)
+security:
+  enable_input_validation: true
+  max_file_size_mb: 500
+  allowed_video_formats:
+    - mp4
+    - avi
+    - mkv
+    - mov
+    - wmv
+    - flv
+    - webm
+  enable_rate_limiting: true
+  rate_limit_requests_per_minute: 60
+  enable_cors: true
+  cors_origins:
+    - "https://yourdomain.com"
+    - "https://www.yourdomain.com"
+  enable_authentication: true
+  jwt_secret: ${VISIONSUB_JWT_SECRET}
+  jwt_expiration: 3600
+  enable_csrf_protection: true
+  enable_xss_protection: true
+  enable_sql_injection_protection: true
+  max_login_attempts: 5
+  account_lockout_duration: 900  # 15 minutes
+
+# Logging configuration (production)
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "/var/log/visionsub/app.log"
+  max_file_size_mb: 100
+  backup_count: 10
+  enable_structured_logging: true
+  enable_json_logging: true
+  log_to_console: true
+  log_to_file: true
+  log_to_remote: true
+  remote_logging_url: ${VISIONSUB_LOGGING_URL}
+  log_level_by_component:
+    root: INFO
+    visionsub.ocr: INFO
+    visionsub.ui: INFO
+    visionsub.gateway: WARNING
+    visionsub.database: WARNING
+    visionsub.redis: WARNING
+
+# Storage configuration (production)
+storage:
+  local_storage_path: "/var/lib/visionsub/storage"
+  max_storage_size_mb: 102400  # 100GB
+  enable_cloud_storage: true
+  cloud_provider: ${VISIONSUB_CLOUD_PROVIDER:-aws}
+  cloud_bucket_name: ${VISIONSUB_CLOUD_BUCKET_NAME}
+  cloud_region: ${VISIONSUB_CLOUD_REGION:-us-east-1}
+  cloud_access_key: ${VISIONSUB_CLOUD_ACCESS_KEY}
+  cloud_secret_key: ${VISIONSUB_CLOUD_SECRET_KEY}
+  enable_backup: true
+  backup_schedule: "0 2 * * *"  # Daily at 2 AM
+  backup_retention_days: 30
+
+# OCR engine configuration (production)
+ocr:
+  default_engine: "PaddleOCR"
+  languages:
+    - "中文"
+    - "英文"
+    - "日文"
+    - "韩文"
+  confidence_threshold: 0.8
+  enable_preprocessing: true
+  enable_postprocessing: true
+  max_image_size_mb: 20
+  supported_formats:
+    - jpg
+    - jpeg
+    - png
+    - bmp
+    - tiff
+    - webp
+  engine_settings:
+    PaddleOCR:
+      use_gpu: true
+      gpu_id: 0
+      use_angle_cls: true
+      lang: "ch"
+    Tesseract:
+      oem: 3
+      psm: 6
+      lang: "chi_sim+eng"
+
+# Video processing configuration (production)
+video:
+  max_video_size_mb: 1000  # 1GB
+  supported_formats:
+    - mp4
+    - avi
+    - mkv
+    - mov
+    - wmv
+    - flv
+    - webm
+  max_resolution: "4K"
+  default_frame_interval: 1.0
+  enable_scene_detection: true
+  scene_threshold: 0.3
+  enable_parallel_processing: true
+  max_parallel_processes: 8
+  enable_hardware_acceleration: true
+  hardware_acceleration_device: "cuda"
+
+# Batch processing configuration (production)
+batch:
+  enabled: true
+  max_batch_size: 1000
+  processing_timeout: 7200  # 2 hours
+  retry_attempts: 3
+  enable_priority_queue: true
+  result_retention_hours: 168  # 7 days
+  enable_email_notifications: true
+  email_smtp_server: ${VISIONSUB_SMTP_SERVER}
+  email_smtp_port: ${VISIONSUB_SMTP_PORT:-587}
+  email_username: ${VISIONSUB_EMAIL_USERNAME}
+  email_password: ${VISIONSUB_EMAIL_PASSWORD}
+  email_from: ${VISIONSUB_EMAIL_FROM}
+  enable_slack_notifications: false
+  slack_webhook_url: ${VISIONSUB_SLACK_WEBHOOK_URL}
+
+# API configuration (production)
+api:
+  version: "1.0.0"
+  enable_documentation: true
+  enable_swagger: true
+  enable_rate_limiting: true
+  enable_caching: true
+  cache_ttl: 300
+  enable_compression: true
+  max_request_size_mb: 50
+  enable_api_keys: true
+  enable_ip_whitelist: false
+  ip_whitelist: []
+  enable_request_logging: true
+  log_request_body: false
+  log_response_body: false
+
+# Web interface configuration (production)
+web:
+  enabled: true
+  host: ${VISIONSUB_WEB_HOST:-web-service}
+  port: ${VISIONSUB_WEB_PORT:-3000}
+  static_files_path: "/app/web/static"
+  template_path: "/app/web/templates"
+  enable_authentication: true
+  session_timeout: 3600
+  max_upload_size: 100
+  enable_websocket: true
+  websocket_path: "/ws"
+  enable_real_time_updates: true
+  enable_notifications: true
+  cdn_enabled: true
+  cdn_url: ${VISIONSUB_CDN_URL}
+
+# Development configuration (production overrides)
+development:
+  enable_debug_mode: false
+  enable_hot_reload: false
+  enable_profiling: false
+  enable_testing: false
+  mock_external_services: false
+  enable_debug_toolbar: false
+
+# High availability configuration
+high_availability:
+  enabled: true
+  load_balancer_type: "nginx"
+  health_check_interval: 10
+  failover_timeout: 30
+  enable_database_replication: true
+  enable_redis_sentinel: true
+  redis_sentinel_hosts:
+    - host: ${VISIONSUB_REDIS_SENTINEL_HOST_1}
+      port: ${VISIONSUB_REDIS_SENTINEL_PORT_1:-26379}
+    - host: ${VISIONSUB_REDIS_SENTINEL_HOST_2}
+      port: ${VISIONSUB_REDIS_SENTINEL_PORT_2:-26379}
+    - host: ${VISIONSUB_REDIS_SENTINEL_HOST_3}
+      port: ${VISIONSUB_REDIS_SENTINEL_PORT_3:-26379}
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  compression_enabled: true
+  encryption_enabled: true
+  backup_destinations:
+    - type: "local"
+      path: "/var/backups/visionsub"
+    - type: "s3"
+      bucket: ${VISIONSUB_BACKUP_S3_BUCKET}
+      region: ${VISIONSUB_BACKUP_S3_REGION}
+      access_key: ${VISIONSUB_BACKUP_S3_ACCESS_KEY}
+      secret_key: ${VISIONSUB_BACKUP_S3_SECRET_KEY}
+
+# Disaster recovery configuration
+disaster_recovery:
+  enabled: true
+  failover_region: ${VISIONSUB_FAILOVER_REGION}
+  rpo: "15 minutes"  # Recovery Point Objective
+  rto: "1 hour"      # Recovery Time Objective
+  enable_cross_region_replication: true
+  enable_geo_replication: true

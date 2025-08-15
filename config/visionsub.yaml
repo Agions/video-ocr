@@ -1,0 +1,238 @@
+# VisionSub Microservices Configuration
+
+# Environment settings
+environment: development
+debug: true
+log_level: INFO
+
+# Hot reload configuration
+hot_reload:
+  enabled: true
+  watch_files: true
+  watch_environment: true
+  debounce_interval: 1.0
+  max_file_size: 10485760  # 10MB
+  allowed_extensions:
+    - .yaml
+    - .yml
+    - .json
+    - .toml
+  ignored_paths:
+    - __pycache__
+    - .git
+    - node_modules
+    - .pytest_cache
+    - venv
+    - .venv
+
+# Database configuration
+database:
+  host: localhost
+  port: 5432
+  database: visionsub
+  username: visionsub
+  password: ""
+  pool_size: 10
+  max_overflow: 20
+  pool_timeout: 30
+  pool_recycle: 3600
+
+# Redis configuration
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+  max_connections: 20
+  socket_timeout: 5.0
+  connection_pool_timeout: 10.0
+
+# OCR Service configuration
+ocr_service:
+  host: localhost
+  port: 8081
+  max_workers: 4
+  queue_size: 1000
+  timeout: 30.0
+  retry_attempts: 3
+  cache_ttl: 3600
+
+# UI Service configuration
+ui_service:
+  host: localhost
+  port: 8080
+  static_files_path: "./static"
+  template_path: "./templates"
+  session_timeout: 3600
+  max_upload_size: 52428800  # 50MB
+
+# Gateway configuration
+gateway:
+  host: localhost
+  port: 8000
+  cors_origins:
+    - "*"
+  rate_limit_requests: 100
+  rate_limit_window: 60
+  jwt_secret: "your-secret-key-change-in-production"
+  jwt_expiration: 3600
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  health_check_interval: 30
+  log_level: INFO
+  tracing_enabled: false
+  profiling_enabled: false
+
+# Service mesh configuration
+service_mesh:
+  enabled: true
+  health_check_interval: 30
+  circuit_breaker_failure_threshold: 5
+  circuit_breaker_recovery_timeout: 60
+  load_balancer_strategy: "round_robin"
+  retry_max_attempts: 3
+  retry_base_delay: 1.0
+  retry_max_delay: 10.0
+
+# Performance configuration
+performance:
+  async_processing: true
+  max_concurrent_requests: 100
+  request_timeout: 30.0
+  worker_threads: 4
+  memory_limit_mb: 1024
+  cache_size_mb: 512
+  enable_compression: true
+
+# Security configuration
+security:
+  enable_input_validation: true
+  max_file_size_mb: 500
+  allowed_video_formats:
+    - mp4
+    - avi
+    - mkv
+    - mov
+    - wmv
+    - flv
+    - webm
+  enable_rate_limiting: true
+  rate_limit_requests_per_minute: 60
+  enable_cors: true
+  cors_origins:
+    - "*"
+  enable_authentication: false
+  jwt_secret: "your-secret-key-change-in-production"
+  jwt_expiration: 3600
+
+# Logging configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null
+  max_file_size_mb: 10
+  backup_count: 5
+  enable_structured_logging: true
+  enable_json_logging: false
+  log_to_console: true
+  log_to_file: false
+  log_to_remote: false
+  remote_logging_url: null
+
+# Storage configuration
+storage:
+  local_storage_path: "./storage"
+  max_storage_size_mb: 10240  # 10GB
+  enable_cloud_storage: false
+  cloud_provider: "aws"  # aws, gcp, azure
+  cloud_bucket_name: ""
+  cloud_region: "us-east-1"
+  cloud_access_key: ""
+  cloud_secret_key: ""
+
+# OCR engine configuration
+ocr:
+  default_engine: "PaddleOCR"
+  languages:
+    - "中文"
+    - "英文"
+  confidence_threshold: 0.8
+  enable_preprocessing: true
+  enable_postprocessing: true
+  max_image_size_mb: 10
+  supported_formats:
+    - jpg
+    - jpeg
+    - png
+    - bmp
+    - tiff
+    - webp
+
+# Video processing configuration
+video:
+  max_video_size_mb: 500
+  supported_formats:
+    - mp4
+    - avi
+    - mkv
+    - mov
+    - wmv
+    - flv
+    - webm
+  max_resolution: "4K"
+  default_frame_interval: 1.0
+  enable_scene_detection: true
+  scene_threshold: 0.3
+  enable_parallel_processing: true
+  max_parallel_processes: 4
+
+# Batch processing configuration
+batch:
+  enabled: true
+  max_batch_size: 100
+  processing_timeout: 3600  # 1 hour
+  retry_attempts: 3
+  enable_priority_queue: true
+  result_retention_hours: 24
+  enable_email_notifications: false
+  email_smtp_server: ""
+  email_smtp_port: 587
+  email_username: ""
+  email_password: ""
+
+# API configuration
+api:
+  version: "1.0.0"
+  enable_documentation: true
+  enable_swagger: true
+  enable_rate_limiting: true
+  enable_caching: true
+  cache_ttl: 300
+  enable_compression: true
+  max_request_size_mb: 10
+
+# Web interface configuration
+web:
+  enabled: true
+  host: localhost
+  port: 3000
+  static_files_path: "./web/static"
+  template_path: "./web/templates"
+  enable_authentication: false
+  session_timeout: 3600
+  max_upload_size: 50
+  enable_websocket: true
+  websocket_path: "/ws"
+
+# Development configuration
+development:
+  enable_debug_mode: true
+  enable_hot_reload: true
+  enable_profiling: false
+  enable_testing: true
+  test_database_url: "sqlite:///test.db"
+  mock_external_services: true
+  enable_debug_toolbar: false
